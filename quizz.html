@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Time</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://images.pexels.com/photos/262488/pexels-photo-262488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff; /* Text color adjustment for visibility */
+        }
+
+        #quiz-container {
+            background-color: #ffffff; /* Opaque white background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            color: #000; /* Text color inside the quiz container */
+        }
+
+        #question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        #options {
+            margin-bottom: 20px;
+        }
+
+        #options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        #submit-btn {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        #result-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        #result {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #score {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <h1>Quiz Time!!</h1>
+        <div id="question-container">
+            <p id="question"></p>
+            <div id="options">
+                <!-- Options will be dynamically added here -->
+            </div>
+        </div>
+        <button id="submit-btn">Submit Answer</button>
+        <div id="result-container">
+            <p id="result"></p>
+            <p id="score"></p>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Which fast-food chain uses a clown as its mascot?",
+                options: ["Subway", "Dominoes", "KFC", "McDonalds"],
+                answer: "McDonalds"
+            },
+            {
+                question: "Which language is used for web development?",
+                options: ["Python", "JavaScript", "C++", "Java"],
+                answer: "JavaScript"
+            },
+            {
+                question: "What is the main ingredient in guacamole?",
+                options: ["Tomato", "Avocado", "Onion", "Pepper"],
+                answer: "Avocado"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            document.getElementById("question").textContent = currentQuestion.question;
+            
+            const optionsContainer = document.getElementById("options");
+            optionsContainer.innerHTML = "";
+            
+            currentQuestion.options.forEach(option => {
+                const optionElement = document.createElement("div");
+                optionElement.innerHTML = `
+                    <label>
+                        <input type="radio" name="option" value="${option}"> ${option}
+                    </label>
+                `;
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+
+        function evaluateAnswer() {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            if (!selectedOption) {
+                alert("Please select an answer!");
+                return;
+            }
+            
+            const answer = selectedOption.value;
+            const currentQuestion = quizData[currentQuestionIndex];
+
+            if (answer === currentQuestion.answer) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                displayResults();
+            }
+        }
+
+        function displayResults() {
+            document.getElementById("question-container").style.display = "none";
+            document.getElementById("submit-btn").style.display = "none";
+            document.getElementById("result-container").style.display = "block";
+
+            document.getElementById("result").textContent = "YAYYY!!!QUIZ COMPLETED!";
+            document.getElementById("score").textContent = `Your Score: ${score} / ${quizData.length}`;
+        }
+
+        document.getElementById("submit-btn").addEventListener("click", evaluateAnswer);
+
+        loadQuestion();
+    </script>
+</body>
+</html>
